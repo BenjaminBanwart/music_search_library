@@ -1,10 +1,12 @@
-import { useEffect, useState } from 'react'
+import { useEffect, Suspense, useState } from 'react'
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 import Gallery from './components/Gallery'
 import SearchBar from './components/SearchBar'
 import AlbumView from './components/AlbumView'
 import ArtistView from './components/ArtistView'
 import { Fragment } from 'react/cjs/react.production.min'
+import { DataContext } from './contexts/DataContext'
+import { SearchContext } from './contexts/SearchContext'
 import './App.css'
 
 function App() {
@@ -42,8 +44,12 @@ function App() {
 				<Routes>
 					<Route path="/" element={
 						<Fragment>
-							<SearchBar handleSearch = {handleSearch}/>
+						<DataContext.Provider value={data} >
 							<Gallery data={data} />
+						</DataContext.Provider>
+						<SearchContext.Provider>
+							<SearchBar handleSearch = {handleSearch}/>
+						</SearchContext.Provider>
 						</Fragment>
 					} />
 					<Route path="/album/:id" element={<AlbumView />} />
@@ -51,7 +57,7 @@ function App() {
 				</Routes>
 			</Router>
 		</div>
-  );
+);
 }
 
 export default App;
